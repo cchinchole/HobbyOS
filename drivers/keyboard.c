@@ -14,6 +14,8 @@
 
 static char key_buffer[256];
 
+int testgithub = 1;
+//this is a test!
 
 
 char scancodes[]={
