@@ -14,7 +14,7 @@
 
 static char key_buffer[256];
 
-int testgithub = 1;
+int testgithub = 0;
 //this is a test!
 
 
