@@ -4,7 +4,7 @@ GAS = i686-elf-as
 GCC = i686-elf-gcc
 OBJCOPY = i686-elf-objcopy
 
-ABS_DIR = $home/src/myos
+ABS_DIR = $${HOME}/src/myos
 
 LINKER_SCRIPT = linker.ld
 GRUB_CFG = grub.cfg
