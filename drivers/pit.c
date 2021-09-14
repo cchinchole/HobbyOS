@@ -4,7 +4,7 @@
 #include  <libc/string.h>
 #include  <drivers/pit.h>
 #include  <drivers/vga.h>
-#include <stdint.h>
+#include  <stdint.h>
 
 #define TIMER_CMD 0x43
 #define TIMER_DATA 0x40
@@ -12,11 +12,31 @@
 
 
 int tick = 0;
+int maxTick = -1;
+int startTick = 0;
+bool showTick = false;
+void uninstall_timer();
+
+
 static void timer_callback(registers_t* r)
 {
     tick++;
-    kprintf("Timer tick %d\n", tick);
+    if(showTick)
+        kprintf("Timer tick %d\n", tick);
+
+    if(maxTick != -1)
+        if(tick >= maxTick)
+        {
+            uninstall_timer();
+            tick = 0;
+            maxTick = -1;
+        }
     REG_PARAM(r);
+}
+
+int give_tick()
+{
+    return tick;
 }
 
 void install_timer(uint32_t freq)
@@ -30,6 +50,19 @@ void install_timer(uint32_t freq)
     kprintf("Setting timer to %d\n", freq);
     pbout(TIMER_DATA, low);
     pbout(TIMER_DATA, high);
+}
+
+void install_inf_timer(bool doShowTick, uint32_t freq)
+{
+    showTick = doShowTick;
+    maxTick = -1;
+    install_timer(freq);
+}
+
+void install_tick_timer(uint32_t freq, int mTick)
+{
+    maxTick = mTick;
+    install_timer(freq);
 }
 
 void uninstall_timer()

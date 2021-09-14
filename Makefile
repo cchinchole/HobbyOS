@@ -35,6 +35,9 @@ grub-iso: link
 	cp $(GRUB_CFG) build/isodir/boot/grub/$(GRUB_CFG)
 	grub-mkrescue -o $(OUT_FILE_NAME).iso build/isodir
 
+build: grub-iso
+	echo "Successfully built"
+
 run: grub-iso
 	qemu-system-x86_64 -cdrom $(OUT_FILE_NAME).iso -m 128 -curses
 

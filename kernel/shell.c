@@ -3,6 +3,7 @@
 #include  <drivers/pit.h>
 #include  <libc/string.h>
 #include  <libc/stdio.h>
+#include  <libc/stddef.h>
 
 void split(char* tmp){
 	int len = strlen(tmp);
@@ -50,8 +51,31 @@ void user_input(char input[]) {
         asm volatile("hlt");
     }
     else if(strcmp(cmd, "ENTIMER") == 0) {
-        kprintf("Enabling timer\n");
-        install_timer(10000);
+        char* operans = iter(cmd, end);
+        if(operans == NULL){
+			kprintf("\nSpecify type of timer\n 0 For infinite\n1 for finite.\n");
+        }
+        else
+        {
+            int num1 = atooi(operans);
+            switch(num1)
+            {
+                case 0:
+                 kprintf("Enabling timer\n");
+                 install_inf_timer(false, 10000);
+                break;
+                case 1:
+                    split(operans);
+                    char* opertwo = iter(operans, end);
+                    int num2 = atooi(opertwo);
+                    install_tick_timer(10000, num2);
+                break;
+            }
+        }
+
+    }
+    else if(strcmp(cmd, "GIVETICK") == 0){
+        kprintf("Current tick: %d\n", give_tick());
     }
     else if(strcmp(cmd, "HLTIMER") == 0) {
         kprintf("Disabling timer\n");
@@ -68,7 +92,7 @@ void user_input(char input[]) {
             //asm("int $0x" : : "a" (operand));
         }
 
-        asm volatile("int $0x2");
+        asm volatile("int $0xB");
     }
     else if(strcmp(cmd, "DIVIDE") == 0) {
         char* operans = iter(cmd, end);

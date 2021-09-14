@@ -118,53 +118,6 @@ int register_interrupt_handler(uint8_t num, isr_t handler)
 }
 
 void isr_handler(registers_t* r) {
-
-    /*
-   const char* exception_messages[] = {
-    "Division By Zero",
-    "Debug",
-    "Non Maskable Interrupt",
-    "Breakpoint",
-    "Into Detected Overflow",
-    "Out of Bounds",
-    "Invalid Opcode",
-    "No Coprocessor",
-    "Double Fault",
-    "Coprocessor Segment Overrun",
-    "Bad TSS",
-    "Segment Not Present",
-    "Stack Fault",
-    "General Protection Fault",
-    "Page Fault",
-    "Unknown Interrupt",
-    "Coprocessor Fault",
-    "Alignment Check",
-    "Machine Check",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved"};
-
-    if(interrupt_handlers[r->int_no] != 0)
-    {
-        isr_t handler = interrupt_handlers[r->int_no];
-        handler(r);
-    }
-    else
-        kprintf("Received Interrupt: %d\n%s\n", r->int_no, exception_messages[r->int_no]);
-
-
-    */
-
 isr_t handler = interrupt_handlers[(uint8_t)(r->int_no)];
 	if (handler) {
 		handler(r);
@@ -218,7 +171,9 @@ isr_t handler = interrupt_handlers[(uint8_t)(r->int_no)];
 			//	tty_puts("\n\n[error code: ");
 			//	tty_puthex(r->err_code);
 			//	tty_putc(']');
-				panic("[#11] Segment not present");
+				//panic("[#11] Segment not present");
+				kprintf("Error: %d", r->err_code);
+				for(;;){}
 				break;
 
 			case 12:
