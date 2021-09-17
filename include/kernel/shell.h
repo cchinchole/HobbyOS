@@ -1,5 +1,5 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-void user_input(char *input);
+int user_input(char *input);
 #endif

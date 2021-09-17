@@ -171,9 +171,7 @@ isr_t handler = interrupt_handlers[(uint8_t)(r->int_no)];
 			//	tty_puts("\n\n[error code: ");
 			//	tty_puthex(r->err_code);
 			//	tty_putc(']');
-				//panic("[#11] Segment not present");
-				kprintf("Error: %d", r->err_code);
-				for(;;){}
+				panic("[#11] Segment not present");
 				break;
 
 			case 12:

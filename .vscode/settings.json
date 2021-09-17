@@ -4,7 +4,8 @@
         "tty.h": "c",
         "font.h": "c",
         "vga.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "typeinfo": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

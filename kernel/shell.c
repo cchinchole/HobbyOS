@@ -14,10 +14,13 @@ struct Command {
 };
 struct Command echo;
 struct Command timer;
+struct Command clear;
+struct Command halt;
+struct Command testint;
 
 
-const int commandSize = 2;
-struct Command commands[2];
+const int commandSize = 5;
+struct Command commands[5];
 
 void split(char* tmp){
 	int len = strlen(tmp);
@@ -101,6 +104,22 @@ void timerCallback(int args, char* string[])
     }
 }
 
+void haltCallback(int args, char* string[])
+{
+    kprintf("Stopping the CPU. Bye!\n");
+    asm volatile("hlt");
+}
+
+void testintCallback(int args, char* string[])
+{
+    asm volatile("int $0xb");
+}
+
+void clearScreenCallback(int args, char* string[])
+{
+    clear_screen();
+}
+
 
 
 
@@ -114,8 +133,24 @@ timer.name = "timer";
 timer.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
 timer.cbk_ptr = &timerCallback;
 
+clear.name = "clear";
+clear.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
+clear.cbk_ptr = &clearScreenCallback;
+
+halt.name = "halt";
+halt.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
+halt.cbk_ptr = &haltCallback;
+
+testint.name = "testint";
+testint.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
+testint.cbk_ptr = &testintCallback;
+
+
 commands[0] = echo;
 commands[1] = timer;
+commands[2] = clear;
+commands[3] = halt;
+commands[4] = testint;
 }
 
 
@@ -131,7 +166,8 @@ int countSpaces(char string[])
     return spaces;
 }
 
-void user_input(char input[]) {
+int user_input(char input[]) {
+     put_char('\n');
      int spaces = countSpaces(input);
      char* end = &input[strlen(input)];
      split(input);
@@ -171,27 +207,11 @@ void user_input(char input[]) {
         kprintf("%s", cmd);
     }
 
-    foundCM = 0;
+    kprintf("\n> ");
+    return foundCM;
 
     /*
 
-    if (strcmp(cmd, "HLT") == 0) {
-        kprintf("Stopping the CPU. Bye!\n");
-        asm volatile("hlt");
-    }
-    else if(strcmp(cmd, "testint") == 0) {
-        char* operans = iter(cmd, end);
-		if(operans == NULL){
-			kprintf("\nSpecify an interrupt number");
-        }
-        else
-        {
-            //int operand = atooi(operans);
-            //asm("int $0x" : : "a" (operand));
-            //int operand = atooi(operans);
-            asm volatile("int $0xb");
-        }
-    }
     else if(strcmp(cmd, "divide") == 0) {
         char* operans = iter(cmd, end);
 		if(operans == NULL)
@@ -210,10 +230,5 @@ void user_input(char input[]) {
                 }
             }
     }
-    else if(strcmp(cmd, "clear") == 0) {
-        clear_screen();
-    }
-    else {
     }*/
-    kprintf("\n> ");
 }
