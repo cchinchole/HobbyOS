@@ -39,6 +39,11 @@ int give_tick()
     return tick;
 }
 
+int get_elapsed_tick()
+{
+    return tick-startTick;
+}
+
 void install_timer(uint32_t freq)
 {
     kprintf("Installing Timer.\n");
@@ -56,13 +61,23 @@ void install_inf_timer(bool doShowTick, uint32_t freq)
 {
     showTick = doShowTick;
     maxTick = -1;
+    startTick = tick;
     install_timer(freq);
 }
 
 void install_tick_timer(uint32_t freq, int mTick)
 {
     maxTick = mTick;
+    startTick = tick;
+    kprintf("Max tick set to %d", maxTick);
     install_timer(freq);
+}
+
+void reset_timer()
+{
+    tick = 0;
+    startTick = 0;
+    maxTick = -1;
 }
 
 void uninstall_timer()

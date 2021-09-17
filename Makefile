@@ -38,6 +38,9 @@ grub-iso: link
 build: grub-iso
 	echo "Successfully built"
 
+runc: grub-iso
+	qemu-system-x86_64 -cdrom $(OUT_FILE_NAME).iso -m 128
+
 run: grub-iso
 	qemu-system-x86_64 -cdrom $(OUT_FILE_NAME).iso -m 128 -curses
 
