@@ -68,6 +68,14 @@ void set_cursor_offset(int offset)
     pbout(VGA_CRTC_DATA, (unsigned char)(offset & 0xff));
 }
 
+char get_char_at(int row, int col)
+{
+	
+    unsigned char* screen = (unsigned char*)VIDEO_ADDRESS;
+    int offset = get_offset(row, col);
+    return (screen[offset]);
+}
+
 void clear_screen()
 {
     int size_screen = MAX_COLS * MAX_ROWS;
@@ -79,7 +87,6 @@ void clear_screen()
         screen[i*2+1] = ATTR;
     }
     set_cursor_offset(get_offset(0, 0));
-
 }
 
 int put_char_at(char c, int row, int col, int color)

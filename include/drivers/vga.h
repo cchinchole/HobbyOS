@@ -67,6 +67,7 @@ void set_cursor_offset(int offset);
 void clear_screen();
 int put_char_at(char c, int row, int col, int color);
 int put_char(char c);
+char get_char_at(int row, int col);
 void demo_graphics();
 void set_attribute(uint16_t a);
 void set_text_mode(int hi_res);

@@ -205,17 +205,56 @@ void keyboard_callback(registers_t* r)
 			if(curIndex<0)
 				curIndex=0;
 
-			//kprintf("---------\nCurrent index: %d\n Data: %s\n---------\n", curIndex, lastCommand[curIndex]);
-			memcpy( key_buffer[get_offset_row(get_cursor_offset())], lastCommand[curIndex], strlen(key_buffer[get_offset_row(get_cursor_offset())]));
-			//set_cursor_offset()
-           break;
-        case BACKSPACE:  
-			/*TODO: Temporary fix, doesn't support key wrapping */
-			if(get_offset_col(get_cursor_offset())>1 )
-			{
-           	 backspace(key_buffer[get_offset_row(get_cursor_offset())]);
-        	 put_char('\b');
+			
+			for(int i = 0; i < MAX_COLS; i++){
+				key_buffer[get_offset_row(get_cursor_offset())][i] = '\0';
 			}
+
+			for(int i = 2; i < MAX_COLS; i++)
+			{
+				put_char_at(' ', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
+			}
+			set_cursor_offset(get_offset(get_offset_row(get_cursor_offset())-1, 2));
+			memcpy( key_buffer[get_offset_row(get_cursor_offset())], lastCommand[curIndex], strlen(lastCommand[curIndex]));
+			kprintf("%s",lastCommand[curIndex]);
+           break;
+		case 0x50:
+			curIndex++;
+			if(curIndex>cmdCounter){
+				curIndex=cmdCounter-1;
+				for(int i = 0; i < MAX_COLS; i++){
+				key_buffer[get_offset_row(get_cursor_offset())][i] = '\0';
+				}
+				for(int i = 2; i < MAX_COLS; i++)
+				{
+					put_char_at(' ', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
+				}
+
+				set_cursor_offset(get_offset(get_offset_row(get_cursor_offset())-1, 2));
+				break;
+			}
+			else
+			{	
+				for(int i = 0; i < MAX_COLS; i++){
+				key_buffer[get_offset_row(get_cursor_offset())][i] = '\0';
+				}
+				for(int i = 2; i < MAX_COLS; i++)
+				{
+					put_char_at(' ', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
+				}
+
+				set_cursor_offset(get_offset(get_offset_row(get_cursor_offset())-1, 2));
+				memcpy( key_buffer[get_offset_row(get_cursor_offset())], lastCommand[curIndex], strlen(lastCommand[curIndex]));
+				kprintf("%s",lastCommand[curIndex]);
+			}
+		break;
+        case BACKSPACE:  
+				if(get_char_at(get_offset_row(get_cursor_offset()), get_offset_col(get_cursor_offset())-1) != '>' && get_char_at(get_offset_row(get_cursor_offset())-1, MAX_COLS-1) != '\0')
+				{
+				backspace(key_buffer[get_offset_row(get_cursor_offset())]);
+				put_char('\b');
+				}
+				
         break;
         case ENTER:
 			kprintf("");
@@ -236,7 +275,6 @@ void keyboard_callback(registers_t* r)
                 if(kbd_state.shift == 0 && kbd_state.caps == 0)
                 {
                     append(key_buffer[get_offset_row(get_cursor_offset())], scancodes[(int)scancode]);
-					//kprintf("-----\n%s\n-------", key_buffer[get_offset_row(get_cursor_offset())]);
                     put_char(scancodes[(int)scancode]);
                 }
 				else if(kbd_state.caps == 1)
