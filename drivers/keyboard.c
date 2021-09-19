@@ -227,7 +227,7 @@ void keyboard_callback(registers_t* r)
 				}
 				for(int i = 2; i < MAX_COLS; i++)
 				{
-					put_char_at(' ', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
+					put_char_at('\0', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
 				}
 
 				set_cursor_offset(get_offset(get_offset_row(get_cursor_offset())-1, 2));
@@ -240,7 +240,7 @@ void keyboard_callback(registers_t* r)
 				}
 				for(int i = 2; i < MAX_COLS; i++)
 				{
-					put_char_at(' ', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
+					put_char_at('\0', get_offset_row(get_cursor_offset()), i, WHITE_ON_BLACK);
 				}
 
 				set_cursor_offset(get_offset(get_offset_row(get_cursor_offset())-1, 2));
