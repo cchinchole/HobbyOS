@@ -168,9 +168,6 @@ isr_t handler = interrupt_handlers[(uint8_t)(r->int_no)];
 				break;
 
 			case 11:
-			//	tty_puts("\n\n[error code: ");
-			//	tty_puthex(r->err_code);
-			//	tty_putc(']');
 				panic("[#11] Segment not present");
 				break;
 
@@ -179,9 +176,6 @@ isr_t handler = interrupt_handlers[(uint8_t)(r->int_no)];
 				break;
 
 			case 13:
-			//	tty_puts("\n\n[error code: ");
-			//	tty_puthex(r->err_code);
-			//	tty_putc(']');
 				panic("[#13] General protection fault");
 				break;
 
@@ -225,7 +219,6 @@ isr_t handler = interrupt_handlers[(uint8_t)(r->int_no)];
 				break;
 
 			default:
-				//warning("isr: null handler");
 				break;
 		}
 	}
