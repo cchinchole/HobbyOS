@@ -4,7 +4,7 @@ GAS = i686-elf-as
 GCC = i686-elf-gcc
 OBJCOPY = i686-elf-objcopy
 
-ABS_DIR = $${HOME}/src/myos
+ABS_DIR = /home/christian/src/HobbyOS
 
 LINKER_SCRIPT = linker.ld
 GRUB_CFG = grub.cfg
@@ -35,14 +35,8 @@ grub-iso: link
 	cp $(GRUB_CFG) build/isodir/boot/grub/$(GRUB_CFG)
 	grub-mkrescue -o $(OUT_FILE_NAME).iso build/isodir
 
-build: grub-iso
-	echo "Successfully built"
-
-runc: grub-iso
-	qemu-system-x86_64 -cdrom $(OUT_FILE_NAME).iso -m 128
-
 run: grub-iso
-	qemu-system-x86_64 -cdrom $(OUT_FILE_NAME).iso -m 128 -curses
+	qemu-system-i386 -cdrom $(OUT_FILE_NAME).iso -m 128 -curses
 
 clean:
 	rm -rf build/

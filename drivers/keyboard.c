@@ -18,6 +18,7 @@ int cmdCounter = 0;
 int curIndex = 0;
 static char lastCommand[256][MAX_COLS];
 static char key_buffer[MAX_ROWS][MAX_COLS];
+char line[25];
 
 
 char scancodes[]={

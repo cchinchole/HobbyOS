@@ -1,6 +1,5 @@
-#ifndef GDT
-#define GDT
-
+#ifndef GDT_H
+#define GDT_H
 #include <stdint.h>
 
 extern void gdt_flush(uint32_t);
@@ -21,8 +20,6 @@ struct gdt_ptr
 	uint32_t base;
 } __attribute__ ((__packed__));
 
-struct gdt_entry gdt[3];
-struct gdt_ptr gdtptr;
 
 void gdt_install();
 void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran);

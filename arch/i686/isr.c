@@ -23,6 +23,8 @@
 #define SLAVE_CMD 0xA0
 #define SLAVE_DATA 0xA1
 
+isr_t interrupt_handlers[256];
+
 
 
 void remap_pic(int offset1, int offset2)
