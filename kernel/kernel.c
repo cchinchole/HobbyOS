@@ -9,7 +9,7 @@
 void kernel_main()
 {
     init_vga();
-   	gdt_install();
+    gdt_install();
     isr_install();
     install_keyboard();
     kprintf("> ");

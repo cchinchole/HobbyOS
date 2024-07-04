@@ -9,14 +9,11 @@
 #define TIMER_CMD 0x43
 #define TIMER_DATA 0x40
 
-
-
 int tick = 0;
 int maxTick = -1;
 int startTick = 0;
 bool showTick = false;
 void uninstall_timer();
-
 
 static void timer_callback(registers_t* r)
 {

@@ -31,19 +31,13 @@
 #define	VGA_NUM_CRTC_REGS	25
 #define	VGA_NUM_GC_REGS		9
 #define	VGA_NUM_AC_REGS		21
-#define	VGA_NUM_REGS		(1 + VGA_NUM_SEQ_REGS + VGA_NUM_CRTC_REGS + \
-				VGA_NUM_GC_REGS + VGA_NUM_AC_REGS)
-
-
-
-
+#define	VGA_NUM_REGS		(1 + VGA_NUM_SEQ_REGS + VGA_NUM_CRTC_REGS + VGA_NUM_GC_REGS + VGA_NUM_AC_REGS)
 
 int get_offset(int row, int col) { return 2 * (row * MAX_COLS + col); }
 int get_offset_row(int offset) { return offset / (2 * MAX_COLS); }
 int get_offset_col(int offset) { return (offset - (get_offset_row(offset)*2*MAX_COLS))/2; }
 
 int ATTR = WHITE_ON_BLACK;
-
 
 void set_attribute(uint16_t a)
 {
@@ -70,7 +64,6 @@ void set_cursor_offset(int offset)
 
 char get_char_at(int row, int col)
 {
-	
     unsigned char* screen = (unsigned char*)VIDEO_ADDRESS;
     int offset = get_offset(row, col);
     return (screen[offset]);
@@ -153,15 +146,10 @@ typedef uint32_t  FARPTR;
 #define FP_OFF(fp)             (((FARPTR) fp) & 0xffff)
 #define FP_TO_LINEAR(seg, off) ((void*) ((((uint16_t) (seg)) << 4) + ((uint16_t) (off))))
 
-
-
-
-
 #define	peekb(S,O)		*(unsigned char *)(16uL * (S) + (O))
 #define	pokeb(S,O,V)		*(unsigned char *)(16uL * (S) + (O)) = (V)
 #define	pokew(S,O,V)		*(unsigned short *)(16uL * (S) + (O)) = (V)
 #define	_vmemwr(DS,DO,S,N)	memcpy((char *)((DS) * 16 + (DO)), S, N)
-
 
 static unsigned get_fb_seg(void)
 {
@@ -203,8 +191,6 @@ static void vmemwr(unsigned dst_off, unsigned char *src, unsigned count)
 	_vmemwr(get_fb_seg(), dst_off, src, count);
 }
 
-
-
 static void (*g_write_pixel)(unsigned x, unsigned y, unsigned c);
 static unsigned g_wd, g_ht;
 
@@ -236,10 +222,12 @@ static void set_plane(unsigned p)
 
 	p &= 3;
 	pmask = 1 << p;
-/* set read plane */
+    
+    /* set read plane */
 	pbout(VGA_GC_INDEX, 4);
 	pbout(VGA_GC_DATA, p);
-/* set write plane */
+
+    /* set write plane */
 	pbout(VGA_SEQ_INDEX, 2);
 	pbout(VGA_SEQ_DATA, pmask);
 }
@@ -270,19 +258,17 @@ static void draw_x(void)
 {
 	unsigned x, y;
 
-/* clear screen */
+    /* clear screen */
 	for(y = 0; y < g_ht; y++)
 		for(x = 0; x < g_wd; x++)
 			g_write_pixel(x, y, 0);
-/* draw 2-color X */
 
+    /* draw 2-color X */
 	for(int i = 0; i < 40; i++)
 		for(int x = 0; x < 40; x++)
 		{
 			g_write_pixel(25+i, 25+x, 255);
 		}
-
-		
 }
 
 
@@ -291,39 +277,45 @@ void write_regs(unsigned char *regs)
 {
 	unsigned i;
 
-/* write MISCELLANEOUS reg */
+    /* write MISCELLANEOUS reg */
 	pbout(VGA_MISC_WRITE, *regs);
 	regs++;
-/* write SEQUENCER regs */
+
+    /* write SEQUENCER regs */
 	for(i = 0; i < VGA_NUM_SEQ_REGS; i++)
 	{
 		pbout(VGA_SEQ_INDEX, i);
 		pbout(VGA_SEQ_DATA, *regs);
 		regs++;
 	}
-/* unlock CRTC registers */
+
+    /* unlock CRTC registers */
 	pbout(VGA_CRTC_INDEX, 0x03);
 	pbout(VGA_CRTC_DATA, pbin(VGA_CRTC_DATA) | 0x80);
 	pbout(VGA_CRTC_INDEX, 0x11);
 	pbout(VGA_CRTC_DATA, pbin(VGA_CRTC_DATA) & ~0x80);
-/* make sure they remain unlocked */
+
+    /* make sure they remain unlocked */
 	regs[0x03] |= 0x80;
 	regs[0x11] &= ~0x80;
-/* write CRTC regs */
+
+    /* write CRTC regs */
 	for(i = 0; i < VGA_NUM_CRTC_REGS; i++)
 	{
 		pbout(VGA_CRTC_INDEX, i);
 		pbout(VGA_CRTC_DATA, *regs);
 		regs++;
 	}
-/* write GRAPHICS CONTROLLER regs */
+
+    /* write GRAPHICS CONTROLLER regs */
 	for(i = 0; i < VGA_NUM_GC_REGS; i++)
 	{
 		pbout(VGA_GC_INDEX, i);
 		pbout(VGA_GC_DATA, *regs);
 		regs++;
 	}
-/* write ATTRIBUTE CONTROLLER regs */
+
+    /* write ATTRIBUTE CONTROLLER regs */
 	for(i = 0; i < VGA_NUM_AC_REGS; i++)
 	{
 		(void)pbin(VGA_INSTAT_READ);
@@ -331,7 +323,8 @@ void write_regs(unsigned char *regs)
 		pbout(VGA_AC_WRITE, *regs);
 		regs++;
 	}
-/* lock 16-color palette and unblank display */
+
+    /* lock 16-color palette and unblank display */
 	(void)pbin(VGA_INSTAT_READ);
 	pbout(VGA_AC_INDEX, 0x20);
 }
@@ -342,15 +335,15 @@ static void write_font(unsigned char *buf, unsigned font_height)
 	unsigned char seq2, seq4, gc4, gc5, gc6;
 	unsigned i;
 
-/* save registers
-set_plane() modifies GC 4 and SEQ 2, so save them as well */
+
+    /* Save the registers; set_plane() modifies GC 4 and SEQ 2, so save them as well */
 	pbout(VGA_SEQ_INDEX, 2);
 	seq2 = pbin(VGA_SEQ_DATA);
 
 	pbout(VGA_SEQ_INDEX, 4);
 	seq4 = pbin(VGA_SEQ_DATA);
-/* turn off even-odd addressing (set flat addressing)
-assume: chain-4 addressing already off */
+
+    /* turn off even-odd addressing (set flat addressing); assume: chain-4 addressing already off */
 	pbout(VGA_SEQ_DATA, seq4 | 0x04);
 
 	pbout(VGA_GC_INDEX, 4);
@@ -358,23 +351,28 @@ assume: chain-4 addressing already off */
 
 	pbout(VGA_GC_INDEX, 5);
 	gc5 = pbin(VGA_GC_DATA);
-/* turn off even-odd addressing */
+
+    /* turn off even-odd addressing */
 	pbout(VGA_GC_DATA, gc5 & ~0x10);
 
 	pbout(VGA_GC_INDEX, 6);
 	gc6 = pbin(VGA_GC_DATA);
-/* turn off even-odd addressing */
+
+    /* turn off even-odd addressing */
 	pbout(VGA_GC_DATA, gc6 & ~0x02);
-/* write font to plane P4 */
+
+    /* write font to plane P4 */
 	set_plane(2);
-/* write font 0 */
+
+    /* write font 0 */
 	for(i = 0; i < 256; i++)
 	{
 		vmemwr(16384u * 0 + i * 32, buf, font_height);
 		buf += font_height;
 	}
 
-/* restore registers */
+
+    /* restore registers */
 	pbout(VGA_SEQ_INDEX, 2);
 	pbout(VGA_SEQ_DATA, seq2);
 	pbout(VGA_SEQ_INDEX, 4);
@@ -406,12 +404,14 @@ void set_text_mode(int hi_res)
 		rows = 25;
 		ht = 16;
 	}
-/* set font */
+
+    /* set font */
 	if(ht >= 16)
 		write_font(g_8x16_font, 16);
 	else
 		write_font(g_8x8_font, 8);
-/* tell the BIOS what we've done, so BIOS text output works OK */
+
+    /* tell the BIOS what we've done, so BIOS text output works OK */
 	pokew(0x40, 0x4A, cols);	/* columns on screen */
 	pokew(0x40, 0x4C, cols * rows * 2); /* framebuffer size */
 	pokew(0x40, 0x50, 0);		/* cursor pos'n */
@@ -419,7 +419,8 @@ void set_text_mode(int hi_res)
 	pokeb(0x40, 0x61, ht - 2);
 	pokeb(0x40, 0x84, rows - 1);	/* rows on screen - 1 */
 	pokeb(0x40, 0x85, ht);		/* char height */
-/* set white-on-black attributes for all text */
+
+    /* set white-on-black attributes for all text */
 	for(i = 0; i < cols * rows; i++)
 		pokeb(0xB800, i * 2 + 1, 7);
 }
@@ -432,6 +433,7 @@ void init_vga()
 	klog(LOG_SUCCESS, "Vga initalized.", 1);
 }
 
+/* I use this to confirm the graphics does initialize, no need for this anymore though */
 void demo_graphics()
 {
     /* 256-color */

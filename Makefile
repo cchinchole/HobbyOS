@@ -4,7 +4,8 @@ GAS = i686-elf-as
 GCC = i686-elf-gcc
 OBJCOPY = i686-elf-objcopy
 
-ABS_DIR = /home/christian/src/HobbyOS
+ABS_DIR := ${CURDIR}
+
 
 LINKER_SCRIPT = linker.ld
 GRUB_CFG = grub.cfg
@@ -44,6 +45,7 @@ clean:
 build/%.o: %.asm
 	$(shell mkdir -p $(ABS_DIR)/$(dir $@))
 	$(GAS) -o $(ABS_DIR)/$@ $<
+
 build/%.o: %.c
 	$(shell mkdir -p $(ABS_DIR)/$(dir $@))
 	$(GCC) $(COMPILER_FLAGS) -o $(ABS_DIR)/$@ $<

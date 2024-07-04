@@ -52,70 +52,70 @@
 
 
 
-	# Tell the assembler theres an external symbol in use
-	.extern isr_handler
-	.extern irq_handler
+# Tell the assembler theres an external symbol in use
+.extern isr_handler
+.extern irq_handler
 
 	
-	# irq common stub
-	.global irq_common_stub
-	.type irq_common_stub, @function
-	irq_common_stub:
-		pusha
-		mov %ds, %ax
-		push %eax
-		mov $0x10, %ax
-		mov %ax, %ds 
-		mov %ax, %es
-		mov %ax, %fs
-		mov %ax, %gs
+# irq common stub
+.global irq_common_stub
+.type irq_common_stub, @function
+irq_common_stub:
+	pusha
+	mov %ds, %ax
+	push %eax
+	mov $0x10, %ax
+	mov %ax, %ds 
+	mov %ax, %es
+	mov %ax, %fs
+	mov %ax, %gs
 		
-		push %esp
-		cld
+	push %esp
+	cld
 		
-		call irq_handler
+	call irq_handler
 		
-		pop %ebx
-		pop %ebx
-		mov %bx, %ds
-		mov %bx, %es
-		mov %bx, %fs
-		mov %bx, %gs
+	pop %ebx
+	pop %ebx
+	mov %bx, %ds
+	mov %bx, %es
+	mov %bx, %fs
+	mov %bx, %gs
 		
-		popa
-		addl $8, %esp
-		sti
-		iret
+	popa
+	addl $8, %esp
+	sti
+	iret
 
-	# isr common stub
-	.global isr_common_stub
-	.type isr_common_stub, @function
-	isr_common_stub:
-		pusha
-		mov %ds, %ax
-		push %eax
-		mov $0x10, %ax
-		mov %ax, %ds 
-		mov %ax, %es
-		mov %ax, %fs
-		mov %ax, %gs
+# isr common stub
+.global isr_common_stub
+.type isr_common_stub, @function
+isr_common_stub:
+	pusha
+	mov %ds, %ax
+	push %eax
+	mov $0x10, %ax
+	mov %ax, %ds 
+	mov %ax, %es
+	mov %ax, %fs
+	mov %ax, %gs
 		
-		push %esp
-		cld
+	push %esp
+	cld
 		
-		call isr_handler
+	call isr_handler
+
+	pop %eax
+	pop %eax
+	mov %bx, %ds
+	mov %bx, %es
+	mov %bx, %fs
+	mov %bx, %gs
 		
-		pop %eax
-		pop %eax
-		mov %bx, %ds
-		mov %bx, %es
-		mov %bx, %fs
-		mov %bx, %gs
-		
-		popa
-		addl $8, %esp
-		sti
-		iret
+	popa
+	addl $8, %esp
+	sti
+	iret
 
 		
 isr0:
