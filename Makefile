@@ -37,7 +37,7 @@ grub-iso: link
 	grub-mkrescue -o $(OUT_FILE_NAME).iso build/isodir
 
 run: grub-iso
-	qemu-system-i386 -cdrom $(OUT_FILE_NAME).iso -m 128 -curses
+	qemu-system-i386 -cdrom $(OUT_FILE_NAME).iso -m 128
 
 clean:
 	rm -rf build/

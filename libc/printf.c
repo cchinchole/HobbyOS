@@ -3,11 +3,9 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <stdarg.h>
-#include  <libc/stdio.h>
-#include  <libc/string.h>
-#include  <drivers/vga.h>
- 
-
+#include <libc/stdio.h>
+#include <libc/string.h>
+#include <drivers/vga.h>
 
 static int kprint(const char* data, size_t length) {
 	const unsigned char* bytes = (const unsigned char*) data;
@@ -175,7 +173,6 @@ int kprintf(const char* restrict format, ...) {
 	va_end(parameters);
 	return written;
 }
-
 
 void klog(int logType, char* message, int endLine)
 {

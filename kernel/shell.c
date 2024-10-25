@@ -10,7 +10,7 @@
 struct Command {
         char* name;
         char* syntax; //Example -type= -example=
-        void (*cbk_ptr)(int, char*);
+        void (*cbk_ptr)(int, char**);
 };
 struct Command echo;
 struct Command timer;
@@ -127,23 +127,23 @@ void buildCommands()
 {
 echo.name = "echo";
 echo.syntax = "echo <string>";
-echo.cbk_ptr = &echoCallback;
+echo.cbk_ptr = echoCallback;
 
 timer.name = "timer";
 timer.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
-timer.cbk_ptr = &timerCallback;
+timer.cbk_ptr = timerCallback;
 
 clear.name = "clear";
 clear.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
-clear.cbk_ptr = &clearScreenCallback;
+clear.cbk_ptr = clearScreenCallback;
 
 halt.name = "halt";
 halt.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
-halt.cbk_ptr = &haltCallback;
+halt.cbk_ptr = haltCallback;
 
 testint.name = "testint";
 testint.syntax = "timer <enable, disable, tick, elasped> <duration; 0 for inf>";
-testint.cbk_ptr = &testintCallback;
+testint.cbk_ptr = testintCallback;
 
 
 commands[0] = echo;

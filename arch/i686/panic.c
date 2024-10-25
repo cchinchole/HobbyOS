@@ -1,5 +1,6 @@
 #include <arch/i686/panic.h>
 #include <drivers/vga.h>
+#include <libc/stdio.h>
 
 void panic_vanilla(char *reason, char *file, uint32_t line) {
   asm("cli");

@@ -4,7 +4,7 @@ This is my hobbyos that I am developing for fun through barebones.org and james 
 ## Building the CC
 
 ### Dependencies
-build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev grub2 xorriso qemu-system-i386
+build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev grub2 xorriso mtools qemu-system-i386
 
 ### Setting PATH
 export PREFIX="$HOME/opt/cross"
