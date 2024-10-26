@@ -144,8 +144,8 @@ void backspace(char s[]) {
 }
 struct keystate kbd_state = {0, 0, 0, 0, 0};
 
-void enterCommand(char key_buffer[]) {
-  memcpy(lastCommand[cmdCounter], key_buffer, strlen(key_buffer));
+void enterCommand(char key_buff[]) {
+  strcpy(lastCommand[cmdCounter], key_buff);
   cmdCounter++;
   curIndex = cmdCounter;
 }
@@ -200,7 +200,10 @@ void keyboard_callback(registers_t *r) {
     kprintf("%s", lastCommand[curIndex]);
     break;
   case 0x50:
+    /* Going downward */
     curIndex++;
+
+    /* Check if we hit the command counter limit, if so then we will leave the option blank */
     if (curIndex > cmdCounter) {
       curIndex = cmdCounter - 1;
       for (int i = 0; i < MAX_COLS; i++) {
@@ -214,6 +217,7 @@ void keyboard_callback(registers_t *r) {
       set_cursor_offset(get_offset(get_offset_row(get_cursor_offset()) - 1, 2));
       break;
     } else {
+      /* Here we have not hit the limit */
       for (int i = 0; i < MAX_COLS; i++) {
         key_buffer[get_offset_row(get_cursor_offset())][i] = '\0';
       }
@@ -229,6 +233,7 @@ void keyboard_callback(registers_t *r) {
     }
     break;
   case BACKSPACE:
+    /* TODO: wtf, just change this to check if we will backspace against the offset of ' >' not check characters like this */
     if (get_char_at(get_offset_row(get_cursor_offset()),
                     get_offset_col(get_cursor_offset()) - 1) != '>' &&
         get_char_at(get_offset_row(get_cursor_offset()) - 1, MAX_COLS - 1) !=
@@ -239,13 +244,13 @@ void keyboard_callback(registers_t *r) {
 
     break;
   case ENTER:
-    kprintf("");
     char tmphold[256];
-    memcpy(tmphold, key_buffer[get_offset_row(get_cursor_offset())],
-           strlen(key_buffer[get_offset_row(get_cursor_offset())]));
+    int curOff = get_offset_row(get_cursor_offset());
+    strcpy(tmphold, key_buffer[curOff]);
     if (user_input(key_buffer[get_offset_row(get_cursor_offset())]))
       enterCommand(tmphold);
     key_buffer[get_offset_row(get_cursor_offset())][0] = '\0';
+    key_buffer[get_offset_row(get_cursor_offset())][1] = '>';
     break;
   case 0x3E:
     put_char('>');

@@ -14,6 +14,7 @@ void* memcpy(void* restrict dstptr, const void* restrict srcptr, size_t size);
 void* memmove(void*, const void*, size_t);
 void* memset(void*, int, size_t);
 size_t strlen(const char* str);
+char *strcpy(char *dest, const char *src);
 
 
 #endif
