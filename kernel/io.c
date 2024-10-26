@@ -1,4 +1,4 @@
-#include  <arch/i686/io.h>
+#include  <kernel/io.h>
 #include <stdint.h>
 
 uint8_t pbin(uint16_t port_num)

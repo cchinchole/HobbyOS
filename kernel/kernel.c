@@ -1,9 +1,9 @@
 #include <libc/stdio.h>
-#include <arch/i686/isr.h>
-#include <arch/i686/gdt.h>
+#include <kernel/interrupts/isr.h>
+#include <kernel/interrupts/gdt.h>
 #include <drivers/pit.h>
 #include <drivers/keyboard.h>
-#include <arch/i686/panic.h>
+#include <kernel/interrupts/panic.h>
 #include <drivers/vga.h>
 
 void kernel_main()

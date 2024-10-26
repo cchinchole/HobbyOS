@@ -1,5 +1,5 @@
-#include <arch/i686/io.h>
-#include <arch/i686/isr.h>
+#include <kernel/io.h>
+#include <kernel/interrupts/isr.h>
 #include <drivers/keyboard.h>
 #include <drivers/pit.h>
 #include <drivers/vga.h>

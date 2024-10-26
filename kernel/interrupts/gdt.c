@@ -1,4 +1,4 @@
-#include  <arch/i686/gdt.h>
+#include <kernel/interrupts/gdt.h>
 #include <stdint.h>
 #include <libc/stdio.h>
 

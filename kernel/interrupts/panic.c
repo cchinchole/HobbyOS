@@ -1,4 +1,4 @@
-#include <arch/i686/panic.h>
+#include <kernel/interrupts/panic.h>
 #include <drivers/vga.h>
 #include <libc/stdio.h>
 

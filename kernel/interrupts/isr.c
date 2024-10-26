@@ -1,7 +1,7 @@
-#include  <arch/i686/isr.h>
-#include  <arch/i686/idt.h>
-#include  <arch/i686/io.h>
-#include  <arch/i686/panic.h>
+#include  <kernel/interrupts/isr.h>
+#include  <kernel/interrupts/idt.h>
+#include  <kernel/io.h>
+#include  <kernel/interrupts/panic.h>
 #include  <libc/stdio.h>
 #include  <libc/string.h>
 #include  <drivers/vga.h>

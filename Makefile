@@ -15,10 +15,11 @@ INC_FILES=include/
 COMPILER_FLAGS = -c -ffreestanding -O2 -Wall -Wextra -std=gnu99 -ggdb -I$(INC_FILES)
 LINKER_FLAGS = -T $(LINKER_SCRIPT) -ffreestanding -O2 -nostdlib -lgcc -ggdb
 
+#ASM_FILES := $(wildcard boot/*.asm kernel/interrupts/*.asm)
 ASM_FILES := $(wildcard boot/*.asm)
 ASM_OBJ_FILES := $(ASM_FILES:.asm=.o)
 
-C_FILES := $(wildcard kernel/*.c libc/*.c arch/i686/*.c drivers/*.c)
+C_FILES := $(wildcard kernel/drivers/*.c kernel/interrupts/*.c kernel/*.c libc/*.c )
 C_OBJ_FILES := $(C_FILES:.c=.o)
 
 assemble: $(ASM_OBJ_FILES)

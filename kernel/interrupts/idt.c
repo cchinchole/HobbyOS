@@ -1,5 +1,5 @@
-#include  <arch/i686/idt.h>
-#include  <arch/i686/types.h>
+#include  <kernel/interrupts/idt.h>
+#include  <kernel/types.h>
 
 idt_gate_t idt[IDT_ENTRIES];
 idt_register_t idt_reg;

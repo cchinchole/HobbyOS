@@ -1,8 +1,8 @@
-#include  <drivers/vga.h>
-#include  <arch/i686/io.h>
-#include  <libc/string.h>
-#include  <libc/stdio.h>
-#include  <drivers/font.h>
+#include <drivers/vga.h>
+#include <kernel/io.h>
+#include <libc/string.h>
+#include <libc/stdio.h>
+#include <drivers/font.h>
 #include <stdint.h>
 
 #define VIDEO_ADDRESS 0xB8000

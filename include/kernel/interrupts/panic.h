@@ -2,7 +2,7 @@
 #define PANIC_H
 
 #include <stdint.h>
-#include "types.h"
+#include "../types.h"
 
 void panic_vanilla(char *reason, char *file, uint32_t line);
 void panic_assert(char *file, uint32_t line, char *fault);
