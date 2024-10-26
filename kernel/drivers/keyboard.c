@@ -183,6 +183,7 @@ void keyboard_callback(registers_t *r) {
     kbd_state.caps = !kbd_state.caps;
     break;
   case 0x48:
+    /* Going upward */
     curIndex--;
     if (curIndex < 0)
       curIndex = 0;
@@ -232,6 +233,10 @@ void keyboard_callback(registers_t *r) {
       kprintf("%s", lastCommand[curIndex]);
     }
     break;
+    case 0x4B:
+        /* TODO: This fix works but its pretty messy, deleting a character in the middle of a string will still leave a space there instead of concatting the string. */
+        set_cursor_offset( get_cursor_offset() -1 );
+        break;
   case BACKSPACE:
     /* TODO: wtf, just change this to check if we will backspace against the offset of ' >' not check characters like this */
     if (get_char_at(get_offset_row(get_cursor_offset()),
